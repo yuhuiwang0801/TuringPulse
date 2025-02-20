@@ -127,7 +127,7 @@ if prompt := st.chat_input():
 
     elif model_provider == "OpenAI GPT Series":
         openai.api_key = api_key
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model=model_name,
             messages=st.session_state.messages
         )
