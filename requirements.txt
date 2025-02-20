@@ -1,0 +1,6 @@
+streamlit
+openai
+boto3
+langchain_aws
+langchain_core
+os
