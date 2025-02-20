@@ -32,28 +32,94 @@ template = ChatPromptTemplate(
                                                  ),
         HumanMessage(content =
                      """
-                    Solve for \\( x \\) in the equation: \\(2x + 3 = 11\\)
+                    question: "If the expression \(x^2 - 4x + 4\) is equal to 25, for which value(s) of \(x\) does the equation hold?"
                     """
                     ),
 
         AIMessage(content =
                   """
-                  **Step 1:** Write down the equation:
-                    \\(2x + 3 = 11\\)
-                    
-                    **Step 2:** Subtract 3 from both sides to isolate the term with \\( x \\):
-                    \\[
-                    2x + 3 - 3 = 11 - 3 \\quad \\Longrightarrow \\quad 2x = 8
-                    \\]
-                    
-                    **Step 3:** Divide both sides by 2 to solve for \\( x \\):
-                    \\[
-                    \\frac{2x}{2} = \\frac{8}{2} \\quad \\Longrightarrow \\quad x = 4
-                    \\]
-                    
-                    **Final Answer:** \\( x = 4 \\)
+                  math_problem
+                  steps:
+                    - step_number: 1
+                    explanation: >
+                        Start by writing the equation: \(x^2 - 4x + 4 = 25\).
+                    - step_number: 2
+                    explanation: >
+                        Move all terms to one side to set the equation to zero: 
+                        \(x^2 - 4x + 4 - 25 = 0\), which simplifies to \(x^2 - 4x - 21 = 0\).
+                    - step_number: 3
+                    explanation: >
+                        Factor the quadratic, if possible. Observe that 
+                        \(-7 \times 3 = -21\) and \(-7 + 3 = -4\). 
+                        So we can factor it as \((x - 7)(x + 3) = 0\).
+                    - step_number: 4
+                    explanation: >
+                        Use the Zero Product Property: if \((x - 7)(x + 3) = 0\), 
+                        then \(x - 7 = 0\) or \(x + 3 = 0\), leading to 
+                        \(x = 7\) or \(x = -3\).
+                answer: "The values of x that satisfy the equation are x = 7 and x = -3."
                 """
                  ),
+
+        HumanMessage(content =
+                     """
+                    Hat Puzzle:
+
+                    Three people—Ann, Bob, and Chad—are each given a hat. The hats can be either black or white. They know there are exactly two black hats and one white hat in total. They stand in a line such that:
+
+                    - Ann can see Bob and Chad.
+                    - Bob can see Chad.
+                    - Chad cannot see anyone.
+                    They cannot see their own hats. Each is asked, in turn, if they know the color of their own hat:
+
+                    1. Ann looks at Bob and Chad’s hats but says she does not know her own hat color.
+                    2. Bob looks at Chad’s hat and also says he does not know his own hat color.
+                    3. Chad then announces that he does know the color of his own hat.
+                    Question: What color is Chad’s hat, and how does Chad figure it out?
+                    """
+                    ),
+
+        AIMessage(content =
+                  """
+                reasoning_puzzle:
+                steps:
+                    - step_number: 1
+                    title: "Initial Information"
+                    explanation: >
+                        There are 3 people—Ann, Bob, and Chad—each wearing either a black or white hat.
+                        There are exactly 2 black hats and 1 white hat available. Ann can see Bob and
+                        Chad, Bob can see Chad, and Chad sees no one.
+                    - step_number: 2
+                    title: "Ann’s Perspective"
+                    explanation: >
+                        Ann looks at Bob and Chad’s hats. If she saw two white hats, she would know her
+                        hat must be black, because there is only one white hat in total. However, she
+                        states she does not know the color of her hat. Therefore, Bob and Chad cannot
+                        both be wearing white hats.
+                    - step_number: 3
+                    title: "Bob’s Perspective"
+                    explanation: >
+                        Bob sees Chad’s hat. If Bob sees a white hat on Chad, then Bob would deduce his
+                        own hat must be black (to prevent Ann from seeing two white hats). That would
+                        allow Bob to know his hat color. However, Bob also says he does not know his
+                        hat color, implying Chad’s hat cannot be white.
+                    - step_number: 4
+                    title: "Conclusion So Far"
+                    explanation: >
+                        From the above two observations, it follows that Chad’s hat must be black, because
+                        Bob’s uncertainty eliminates the possibility of Chad wearing a white hat.
+                    - step_number: 5
+                    title: "Chad’s Reasoning"
+                    explanation: >
+                        Chad hears Ann didn’t see two whites (so at least one black hat is among Bob or
+                        Chad) and that Bob couldn’t deduce his own hat color even after seeing Chad’s. If
+                        Chad’s hat had been white, Bob would have concluded his own hat was black. Because
+                        Bob remains uncertain, Chad realizes his own hat must be black.
+
+                answer: "Chad’s hat is black."
+                """
+                 ),
+        
 
         HumanMessagePromptTemplate.from_template(template = "{text}")
     ],
