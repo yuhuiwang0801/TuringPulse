@@ -1,6 +1,7 @@
 streamlit
 openai
 boto3
+langchain
 langchain_aws
 langchain_core
 os
