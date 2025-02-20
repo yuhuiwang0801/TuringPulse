@@ -1,5 +1,5 @@
 streamlit
-openai==0.28
+openai
 boto3
 langchain
 langchain-aws
