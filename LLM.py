@@ -13,6 +13,8 @@ import os
 aws_id = os.getenv("aws_access_key_id")
 aws_key = os.getenv("aws_secret_access_key")
 api_key = os.getenv("api_key")
+grok_api_key = os.getenv("grok_api_key")
+
 
 # Initialize the client for AWS Bedrock
 client = boto3.client(
@@ -22,12 +24,17 @@ client = boto3.client(
 
     )
 
+client_grok = OpenAI(
+  api_key=grok_api_key,
+  base_url="https://api.x.ai/v1",
+)
+
 # chat_llm = ChatBedrock(client = client, model_id = "anthropic.claude-3-5-sonnet-20240620-v1:0", model_kwargs = {"temperature": 0})
 
 template = ChatPromptTemplate(
     messages = [
         SystemMessagePromptTemplate.from_template(template = """
-                                                 You are a helpful math assistant. When a user submits a math problem, provide a detailed, step-by-step explanation that shows your full reasoning process leading to the final answer. Break down each part of the problem clearly, ensuring that every step is understandable. If you encounter a problem where you are uncertain or cannot determine the correct answer, simply reply with "I don't know" without making any guesses.
+                                                 You are a helpful math assistant. When a user submits a math or logic reasoning problem, provide a detailed, step-by-step explanation that shows your full reasoning process leading to the final answer. Break down each part of the problem clearly, ensuring that every step is understandable. If you encounter a problem where you are uncertain or cannot determine the correct answer, simply reply with "I don't know" without making any guesses.
                                                  """
                                                  ),
         HumanMessage(content =
@@ -141,13 +148,13 @@ def LLM_invoke(text, chat_llm):
 # Sidebar for API key input and model selection
 with st.sidebar:
     st.title("🔧 Settings")
-    model_provider = st.selectbox("Select Language Model Provider", ["DeepSeek", "OpenAI GPT Series", "Anthropic Claude Series", "Meta Llama Series"])
+    model_provider = st.selectbox("Select Language Model Provider", ["OpenAI Series", "Anthropic Claude Series", "xAI Grok", "DeepSeek"])
     
     # Capture the API key based on the selected model provider
     if model_provider == "DeepSeek":
         st.info("DeepSeek is currently not supported due to regulations.")
 
-    if model_provider == "OpenAI GPT Series":
+    if model_provider == "OpenAI Series":
         # api_key = st.text_input("OpenAI API Key", type="password", key="openai_key")
         model_name = st.selectbox("Select OpenAI Model", ["gpt-4o-mini", "o1-mini"])
     
@@ -158,11 +165,16 @@ with st.sidebar:
         model_name = st.selectbox("Select Claude Model", ["Claude 3 Haiku", "Claude 3.5 Sonnet v1"])
         st.info("These models are supported by AWS Bedrock. Due to token limitation, It cannot be requested many times in a short period of time. Please use it wisely.")
 
-    if model_provider == "Meta Llama Series":
-        model_name = st.selectbox("Select Llama Model", ["Llama 3.2 3B", "Llama 3.3 70B"])
-        st.info("These models are supported by AWS Bedrock. Due to token limitation, It cannot be requested many times in a short period of time. Please use it wisely.")
+    # if model_provider == "Meta Llama Series":
+    #     model_name = st.selectbox("Select Llama Model", ["Llama 3.2 3B", "Llama 3.3 70B"])
+    #     st.info("These models are supported by AWS Bedrock. Due to token limitation, It cannot be requested many times in a short period of time. Please use it wisely.")
 
-st.title("💬 Your math assistant")
+    if model_provider == "xAI Grok":
+        st.info("The current model loaded is the latest version of Grok-2.")
+        model_name = "grok-2-latest"
+
+
+st.title("💬 TuringPulse")
 
 # Initialize session state for chat history
 if "messages" not in st.session_state:
@@ -191,9 +203,17 @@ if prompt := st.chat_input():
         # )
         # msg = response.choices[0].message.content
 
-    elif model_provider == "OpenAI GPT Series":
+    elif model_provider == "OpenAI Series":
         openai.api_key = api_key
         response = openai.chat.completions.create(
+            model=model_name,
+            messages=st.session_state.messages
+        )
+        msg = response.choices[0].message.content
+
+    elif model_provider == "xAI Grok":
+        openai.api_key = grok_api_key
+        response = client_grok.chat.completions.create(
             model=model_name,
             messages=st.session_state.messages
         )
