@@ -34,98 +34,108 @@ client_grok = OpenAI(
 template = ChatPromptTemplate(
     messages = [
         SystemMessagePromptTemplate.from_template(template = """
-                                                 You are a helpful math assistant. When a user submits a math or logic reasoning problem, provide a detailed, step-by-step explanation that shows your full reasoning process leading to the final answer. Break down each part of the problem clearly, ensuring that every step is understandable. If you encounter a problem where you are uncertain or cannot determine the correct answer, simply reply with "I don't know" without making any guesses.
+                                                 You are a helpful math assistant. When a user submits a math or logic reasoning problem, provide a detailed, step-by-step explanation that shows your full reasoning process leading to the final answer. Break down each part of the problem clearly, ensuring that every step is understandable. 
+                                                 If you encounter a problem where you are uncertain or cannot determine the correct answer, simply reply with "I don't know" without making any guesses.
+
+                                                Additionally, you must follow these instructions:
+                                                
+                                                1. Maintain a detailed chain-of-thought encapsulated in `<thinking> ... </thinking>` tags. This chain-of-thought should consist of 10-15 paragraphs that summarize your internal reasoning process.
+                                                2. Present both interim and final results using `<output> ... </output>` tags. Use your interim results to derive the final answer, and ensure that your final answer is clearly highlighted within these tags.
+                                                3. Your response should be structured so that the chain-of-thought (inside `<thinking>` tags) fully explains your reasoning step-by-step, and the final answer (inside `<output>` tags) is directly derived from that reasoning.
+                                                4. Ensure that your explanation is complete and well-organized so that every step is understandable by the user.
+                                                
+                                                By following these guidelines, your answer will include both the internal reasoning process and the final result in a clear, structured manner.
                                                  """
                                                  ),
-        # HumanMessage(content =
-        #              """
-        #             question: "If the expression \(x^2 - 4x + 4\) is equal to 25, for which value(s) of \(x\) does the equation hold?"
-        #             """
-        #             ),
+        HumanMessage(content =
+                     """
+                    question: "If the expression \(x^2 - 4x + 4\) is equal to 25, for which value(s) of \(x\) does the equation hold?"
+                    """
+                    ),
 
-        # AIMessage(content =
-        #           """
-        #           math_problem
-        #           steps:
-        #             - step_number: 1
-        #             explanation: >
-        #                 Start by writing the equation: \(x^2 - 4x + 4 = 25\).
-        #             - step_number: 2
-        #             explanation: >
-        #                 Move all terms to one side to set the equation to zero: 
-        #                 \(x^2 - 4x + 4 - 25 = 0\), which simplifies to \(x^2 - 4x - 21 = 0\).
-        #             - step_number: 3
-        #             explanation: >
-        #                 Factor the quadratic, if possible. Observe that 
-        #                 \(-7 \times 3 = -21\) and \(-7 + 3 = -4\). 
-        #                 So we can factor it as \((x - 7)(x + 3) = 0\).
-        #             - step_number: 4
-        #             explanation: >
-        #                 Use the Zero Product Property: if \((x - 7)(x + 3) = 0\), 
-        #                 then \(x - 7 = 0\) or \(x + 3 = 0\), leading to 
-        #                 \(x = 7\) or \(x = -3\).
-        #         answer: "The values of x that satisfy the equation are x = 7 and x = -3."
-        #         """
-        #          ),
+        AIMessage(content =
+                  """
+                  math_problem
+                  steps:
+                    - step_number: 1
+                    explanation: >
+                        Start by writing the equation: \(x^2 - 4x + 4 = 25\).
+                    - step_number: 2
+                    explanation: >
+                        Move all terms to one side to set the equation to zero: 
+                        \(x^2 - 4x + 4 - 25 = 0\), which simplifies to \(x^2 - 4x - 21 = 0\).
+                    - step_number: 3
+                    explanation: >
+                        Factor the quadratic, if possible. Observe that 
+                        \(-7 \times 3 = -21\) and \(-7 + 3 = -4\). 
+                        So we can factor it as \((x - 7)(x + 3) = 0\).
+                    - step_number: 4
+                    explanation: >
+                        Use the Zero Product Property: if \((x - 7)(x + 3) = 0\), 
+                        then \(x - 7 = 0\) or \(x + 3 = 0\), leading to 
+                        \(x = 7\) or \(x = -3\).
+                answer: "The values of x that satisfy the equation are x = 7 and x = -3."
+                """
+                 ),
 
-        # HumanMessage(content =
-        #              """
-        #             Hat Puzzle:
+        HumanMessage(content =
+                     """
+                    Hat Puzzle:
 
-        #             Three people—Ann, Bob, and Chad—are each given a hat. The hats can be either black or white. They know there are exactly two black hats and one white hat in total. They stand in a line such that:
+                    Three people—Ann, Bob, and Chad—are each given a hat. The hats can be either black or white. They know there are exactly two black hats and one white hat in total. They stand in a line such that:
 
-        #             - Ann can see Bob and Chad.
-        #             - Bob can see Chad.
-        #             - Chad cannot see anyone.
-        #             They cannot see their own hats. Each is asked, in turn, if they know the color of their own hat:
+                    - Ann can see Bob and Chad.
+                    - Bob can see Chad.
+                    - Chad cannot see anyone.
+                    They cannot see their own hats. Each is asked, in turn, if they know the color of their own hat:
 
-        #             1. Ann looks at Bob and Chad’s hats but says she does not know her own hat color.
-        #             2. Bob looks at Chad’s hat and also says he does not know his own hat color.
-        #             3. Chad then announces that he does know the color of his own hat.
-        #             Question: What color is Chad’s hat, and how does Chad figure it out?
-        #             """
-        #             ),
+                    1. Ann looks at Bob and Chad’s hats but says she does not know her own hat color.
+                    2. Bob looks at Chad’s hat and also says he does not know his own hat color.
+                    3. Chad then announces that he does know the color of his own hat.
+                    Question: What color is Chad’s hat, and how does Chad figure it out?
+                    """
+                    ),
 
-        # AIMessage(content =
-        #           """
-        #         reasoning_puzzle:
-        #         steps:
-        #             - step_number: 1
-        #             title: "Initial Information"
-        #             explanation: >
-        #                 There are 3 people—Ann, Bob, and Chad—each wearing either a black or white hat.
-        #                 There are exactly 2 black hats and 1 white hat available. Ann can see Bob and
-        #                 Chad, Bob can see Chad, and Chad sees no one.
-        #             - step_number: 2
-        #             title: "Ann’s Perspective"
-        #             explanation: >
-        #                 Ann looks at Bob and Chad’s hats. If she saw two white hats, she would know her
-        #                 hat must be black, because there is only one white hat in total. However, she
-        #                 states she does not know the color of her hat. Therefore, Bob and Chad cannot
-        #                 both be wearing white hats.
-        #             - step_number: 3
-        #             title: "Bob’s Perspective"
-        #             explanation: >
-        #                 Bob sees Chad’s hat. If Bob sees a white hat on Chad, then Bob would deduce his
-        #                 own hat must be black (to prevent Ann from seeing two white hats). That would
-        #                 allow Bob to know his hat color. However, Bob also says he does not know his
-        #                 hat color, implying Chad’s hat cannot be white.
-        #             - step_number: 4
-        #             title: "Conclusion So Far"
-        #             explanation: >
-        #                 From the above two observations, it follows that Chad’s hat must be black, because
-        #                 Bob’s uncertainty eliminates the possibility of Chad wearing a white hat.
-        #             - step_number: 5
-        #             title: "Chad’s Reasoning"
-        #             explanation: >
-        #                 Chad hears Ann didn’t see two whites (so at least one black hat is among Bob or
-        #                 Chad) and that Bob couldn’t deduce his own hat color even after seeing Chad’s. If
-        #                 Chad’s hat had been white, Bob would have concluded his own hat was black. Because
-        #                 Bob remains uncertain, Chad realizes his own hat must be black.
+        AIMessage(content =
+                  """
+                reasoning_puzzle:
+                steps:
+                    - step_number: 1
+                    title: "Initial Information"
+                    explanation: >
+                        There are 3 people—Ann, Bob, and Chad—each wearing either a black or white hat.
+                        There are exactly 2 black hats and 1 white hat available. Ann can see Bob and
+                        Chad, Bob can see Chad, and Chad sees no one.
+                    - step_number: 2
+                    title: "Ann’s Perspective"
+                    explanation: >
+                        Ann looks at Bob and Chad’s hats. If she saw two white hats, she would know her
+                        hat must be black, because there is only one white hat in total. However, she
+                        states she does not know the color of her hat. Therefore, Bob and Chad cannot
+                        both be wearing white hats.
+                    - step_number: 3
+                    title: "Bob’s Perspective"
+                    explanation: >
+                        Bob sees Chad’s hat. If Bob sees a white hat on Chad, then Bob would deduce his
+                        own hat must be black (to prevent Ann from seeing two white hats). That would
+                        allow Bob to know his hat color. However, Bob also says he does not know his
+                        hat color, implying Chad’s hat cannot be white.
+                    - step_number: 4
+                    title: "Conclusion So Far"
+                    explanation: >
+                        From the above two observations, it follows that Chad’s hat must be black, because
+                        Bob’s uncertainty eliminates the possibility of Chad wearing a white hat.
+                    - step_number: 5
+                    title: "Chad’s Reasoning"
+                    explanation: >
+                        Chad hears Ann didn’t see two whites (so at least one black hat is among Bob or
+                        Chad) and that Bob couldn’t deduce his own hat color even after seeing Chad’s. If
+                        Chad’s hat had been white, Bob would have concluded his own hat was black. Because
+                        Bob remains uncertain, Chad realizes his own hat must be black.
 
-        #         answer: "Chad’s hat is black."
-        #         """
-        #          ),
+                answer: "Chad’s hat is black."
+                """
+                 ),
         
 
         HumanMessagePromptTemplate.from_template(template = "{text}")
