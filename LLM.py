@@ -217,7 +217,8 @@ if prompt := st.chat_input():
         openai.api_key = api_key
         response = openai.chat.completions.create(
             model=model_name,
-            messages=st.session_state.messages
+            messages=st.session_state.messages,
+            temperature = 0
         )
         msg = response.choices[0].message.content
 
@@ -225,7 +226,8 @@ if prompt := st.chat_input():
         openai.api_key = grok_api_key
         response = client_grok.chat.completions.create(
             model=model_name,
-            messages=st.session_state.messages
+            messages=st.session_state.messages,
+            temperature = 0
         )
         msg = response.choices[0].message.content
 
