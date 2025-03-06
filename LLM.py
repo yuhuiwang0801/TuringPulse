@@ -217,8 +217,7 @@ if prompt := st.chat_input():
         openai.api_key = api_key
         response = openai.chat.completions.create(
             model=model_name,
-            messages=st.session_state.messages,
-            temperature = 0
+            messages=st.session_state.messages
         )
         msg = response.choices[0].message.content
 
