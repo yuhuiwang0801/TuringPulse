@@ -34,17 +34,7 @@ client_grok = OpenAI(
 template = ChatPromptTemplate(
     messages = [
         SystemMessagePromptTemplate.from_template(template = """
-                                                 You are a helpful math assistant. When a user submits a math or logic reasoning problem, provide a detailed, step-by-step explanation that shows your full reasoning process leading to the final answer. Break down each part of the problem clearly, ensuring that every step is understandable. 
-                                                 If you encounter a problem where you are uncertain or cannot determine the correct answer, simply reply with "I don't know" without making any guesses.
-
-                                                Additionally, you must follow these instructions:
-                                                
-                                                1. Maintain a detailed chain-of-thought encapsulated in `<thinking> ... </thinking>` tags. This chain-of-thought should consist of 10-15 paragraphs that summarize your internal reasoning process.
-                                                2. Present both interim and final results using `<output> ... </output>` tags. Use your interim results to derive the final answer, and ensure that your final answer is clearly highlighted within these tags.
-                                                3. Your response should be structured so that the chain-of-thought (inside `<thinking>` tags) fully explains your reasoning step-by-step, and the final answer (inside `<output>` tags) is directly derived from that reasoning.
-                                                4. Ensure that your explanation is complete and well-organized so that every step is understandable by the user.
-                                                
-                                                By following these guidelines, your answer will include both the internal reasoning process and the final result in a clear, structured manner.
+                                                 You are a helpful math assistant. When a user submits a math or logic reasoning problem, provide a detailed, step-by-step explanation that shows your full reasoning process leading to the final answer. Break down each part of the problem clearly, ensuring that every step is understandable. If you encounter a problem where you are uncertain or cannot determine the correct answer, simply reply with "I don't know" without making any guesses.
                                                  """
                                                  ),
         HumanMessage(content =
