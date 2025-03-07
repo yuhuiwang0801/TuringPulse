@@ -7,6 +7,10 @@ from langchain_aws import ChatBedrock
 
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
+
+import requests
+import base64
+
 # Assume imports for other providers like Anthropic or Cohere are added as needed
 
 import os
@@ -154,6 +158,47 @@ def LLM_invoke(text, chat_llm):
   return result
 
 
+# read and  convert png to base64
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+img_base64 = get_base64_of_bin_file("logo1.png")
+
+st.markdown(
+    f"""
+    <style>
+        .wipe-image {{
+            animation: wipe 2s ease-out 1;  /* 2 seconds wipe effect, runs once then stops */
+            overflow: hidden;
+        }}
+        .custom-title {{
+            background: linear-gradient(#7f7fd5, #86a8e7, #91eae4);  /* Blue to purple gradient */
+            -webkit-background-clip: text;
+            color: transparent!important;  /* Force blue color with !important */
+            font-weight: bold;  /* Optional: make the text bold */
+            font-size: 48px;  /* Optional: change font size */
+        }}
+        @keyframes wipe {{
+            0% {{
+                clip-path: inset(0 100% 0 0);  /* Fully hidden from the right side */
+            }}
+            100% {{
+                clip-path: inset(0 0 0 0);  /* Fully visible */
+            }}
+        }}
+    </style>
+    <div style="text-align: center;">
+        <img src="data:image/png;base64,{img_base64}" alt="Logo" width="120" class="wipe-image"/> 
+        <h1 class="custom-title">TuringPulse</h1>
+        <p>Hi, I'm TuringPulse, your personal math assisstant!👋</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+
 
 # Sidebar for API key input and model selection
 with st.sidebar:
@@ -184,7 +229,6 @@ with st.sidebar:
         model_name = "grok-2-latest"
 
 
-st.title("💬 TuringPulse")
 
 # Initialize session state for chat history
 if "messages" not in st.session_state:
