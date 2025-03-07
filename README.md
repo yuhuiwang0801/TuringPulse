@@ -1,4 +1,4 @@
-# 🤖 LLM_Comparison_Project
+# 🤖 TuringPulse: Your personal math assistant
 🚀 Fine-tuning and Comparing Multiple Language Models (LLMs)
 
 This repository contains scripts and resources for comparing the performance of various language models using different evaluation metrics and visualizations. The goal is to help users understand the strengths and weaknesses of each model based on their requirements.
