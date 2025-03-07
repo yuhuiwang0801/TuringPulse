@@ -192,7 +192,7 @@ st.markdown(
     <div style="text-align: center;">
         <img src="data:image/png;base64,{img_base64}" alt="Logo" width="120" class="wipe-image"/> 
         <h1 class="custom-title">TuringPulse</h1>
-        <p>Hi, I'm TuringPulse, your personal math assisstant!👋</p>
+        <p>Hi, I'm TuringPulse, your personal math assistant!👋</p>
     </div>
     """,
     unsafe_allow_html=True
