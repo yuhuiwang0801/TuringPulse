@@ -3,6 +3,5 @@ openai
 boto3
 langchain
 langchain-aws
-base64
 python-dotenv
 
