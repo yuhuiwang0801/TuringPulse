@@ -1,5 +1,5 @@
 # 🤖 TuringPulse: Your personal math assistant
-Website: turingpulse.streamlit.app
+Website: turingpulse.streamlit.app (app may be suject to close because usage of cloud service, you may ask for reopen)
 
 
 
