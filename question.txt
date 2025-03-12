@@ -1,0 +1,5 @@
+Store A sells raspberries for $5.50 per pint and blackberries for $3.00 per pint. Store B sells raspberries for $6.50 per pint and blackberries for $8.00 per pint. A certain purchase of raspberries and blackberries would cost $37.00 at store A or $66.00 at store B. How many pints of blackberries are in this purchase?
+A) 12 
+B) 8 
+C) 5 
+D) 4"
